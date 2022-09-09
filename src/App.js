@@ -1,11 +1,14 @@
 import "./App.css";
-
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Navbar from "./components/Navbar";
+import Header from "./containers/header/Header";
 
 function App() {
   return (
     <div className="App">
-      <ConnectButton />
+      <div className="gradient__bg">
+        <Navbar />
+        <Header />
+      </div>
     </div>
   );
 }

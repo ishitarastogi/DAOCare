@@ -6,7 +6,7 @@ In a disturbing revelation, the women and child development (WCD) ministry has f
 
 <h2> Protcols used to make the platform Robust and to embed all the necceary functionalities</h2>
 
-<a href="https://worldcoin.org/">Worldcoin project</a> project is taking us one step further towards providing funds to the NGO who actual need funds. With Worldcoin, one person equals one vote, so no one can create multiple accounts and upvote the project multiple times to attract grants. This will make the project Sybil-resistant. 
+<a href="https://worldcoin.org/">Worldcoin project</a> project is taking us one step further towards providing funds to the NGO who actual need funds. With Worldcoin, one person equals one vote, so no one can create multiple accounts and upvote the project multiple times to attract grants. This will make the project Sybil-resistant.
 
 <a href="https://unlock-protocol.com/">Unlock protocol</a> is used for token gating so that only those person who hold our token can cast vote on the proposal. It grant access to the exclusive members who hold the token in order to protect loose voting from the people who are inactive and know nothing about the proposal.
 
@@ -16,4 +16,4 @@ In a disturbing revelation, the women and child development (WCD) ministry has f
 
 <a href="https://epns.io/">EPNS</a> project is used to create an alert whenever a new proposal added to the platform.
 
-<a href="https://docs.valist.io">Valist</a> and <a href="https://www.optimism.io/">Optimism</a> are use to publish and deploy the project. 
+<a href="https://docs.valist.io">Valist</a> and <a href="https://www.optimism.io/">Optimism</a> are use to publish and deploy the project.
