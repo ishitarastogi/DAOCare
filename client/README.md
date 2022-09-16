@@ -17,3 +17,5 @@ In a disturbing revelation, the women and child development (WCD) ministry has f
 <a href="https://epns.io/">EPNS</a> project is used to create an alert whenever a new proposal added to the platform.
 
 <a href="https://docs.valist.io">Valist</a> and <a href="https://www.optimism.io/">Optimism</a> are use to publish and deploy the project.
+
+2b5e853f6ecfc27ec70d44d324ad05b5b19407163a80abd3acf406257b521e81
