@@ -7,8 +7,10 @@ pragma solidity ^0.8.14;
 import {ISuperfluid, ISuperToken, ISuperApp, ISuperAgreement, SuperAppDefinitions} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 
 import {CFAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol";
+import {IDAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/IDAv1Library.sol";
 
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
+import {IInstantDistributionAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
 
 import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
 
@@ -40,54 +42,73 @@ contract DAOCare is SuperAppBase {
 
     error InvalidNullifier();
 
+    ISuperfluid public _host;
     /// @dev Whether a nullifier hash has been used already. Used to prevent double-signaling
     mapping(uint256 => bool) internal nullifierHashes;
     // CFA library setup
     using CFAv1Library for CFAv1Library.InitData;
     CFAv1Library.InitData public cfaV1Lib;
-
+    using IDAv1Library for IDAv1Library.InitData;
+    IDAv1Library.InitData public idaV1;
+    uint32 internal constant _INDEX_ID = 0;
+    uint256 thresholdAmount;
+    uint128 ProposerUnitShare;
     /// @dev Super token that may be streamed to this contract
-    // ISuperToken internal immutable _acceptedToken;
+    ISuperToken internal immutable _acceptedToken;
     // IWorldID internal  worldId;
     /// @dev Super token that may be streamed to this contract
 
     IPublicLock public lock;
+    address public currentProposar;
 
     /// @dev The WorldID group ID (1)
     // uint256 internal immutable groupId = 1;
 
-    // constructor(
-    //     ISuperfluid host,
-    //     ISuperToken acceptedToken,
-    //     address receiver,
-    //     IPublicLock _lockAddress // ,IWorldID _worldId
-    // ) {
-    //     // worldId = _worldId;
+    constructor(
+        ISuperfluid host,
+        ISuperToken acceptedToken,
+        address receiver,
+        IPublicLock _lockAddress // ,IWorldID _worldId
+    ) {
+        // worldId = _worldId;
 
-    //     assert(address(host) != address(0));
-    //     assert(address(acceptedToken) != address(0));
-    //     assert(receiver != address(0));
+        assert(address(host) != address(0));
+        assert(address(acceptedToken) != address(0));
+        assert(receiver != address(0));
 
-    //     _acceptedToken = acceptedToken;
-    //     lock = _lockAddress;
+        _acceptedToken = acceptedToken;
+        lock = _lockAddress;
+        _host = host;
 
-    //     cfaV1Lib = CFAv1Library.InitData({
-    //         host: host,
-    //         cfa: IConstantFlowAgreementV1(
-    //             address(host.getAgreementClass(CFA_ID))
-    //         )
-    //    });
+        cfaV1Lib = CFAv1Library.InitData({
+            host: host,
+            cfa: IConstantFlowAgreementV1(
+                address(host.getAgreementClass(CFA_ID))
+            )
+        });
+        idaV1 = IDAv1Library.InitData({
+            host: host,
+            ida: IInstantDistributionAgreementV1(
+                address(
+                    host.getAgreementClass(
+                        keccak256(
+                            "org.superfluid-finance.agreements.InstantDistributionAgreement.v1"
+                        )
+                    )
+                )
+            )
+        });
 
-    //     // Registers Super App, indicating it is the final level (it cannot stream to other super
-    //     // apps), and that the `before*` callbacks should not be called on this contract, only the
-    //     // `after*` callbacks.
-    //     host.registerApp(
-    //         SuperAppDefinitions.APP_LEVEL_FINAL |
-    //             SuperAppDefinitions.BEFORE_AGREEMENT_CREATED_NOOP |
-    //             SuperAppDefinitions.BEFORE_AGREEMENT_UPDATED_NOOP |
-    //             SuperAppDefinitions.BEFORE_AGREEMENT_TERMINATED_NOOP
-    //     );
-    // }
+        // Registers Super App, indicating it is the final level (it cannot stream to other super
+        // apps), and that the `before*` callbacks should not be called on this contract, only the
+        // `after*` callbacks.
+        host.registerApp(
+            SuperAppDefinitions.APP_LEVEL_FINAL |
+                SuperAppDefinitions.BEFORE_AGREEMENT_CREATED_NOOP |
+                SuperAppDefinitions.BEFORE_AGREEMENT_UPDATED_NOOP |
+                SuperAppDefinitions.BEFORE_AGREEMENT_TERMINATED_NOOP
+        );
+    }
 
     modifier onlyNFTMembership() {
         require(
@@ -96,7 +117,16 @@ contract DAOCare is SuperAppBase {
         );
         _;
     }
+    modifier onlyExpected(ISuperToken superToken, address agreementClass) {
+        if (superToken != _acceptedToken) revert InvalidToken();
+        if (agreementClass != address(cfaV1Lib.cfa)) revert InvalidAgreement();
+        _;
+    }
 
+    modifier onlyHost() {
+        if (msg.sender != address(cfaV1Lib.host)) revert Unauthorized();
+        _;
+    }
     enum VoteType {
         YES,
         NO
@@ -112,11 +142,32 @@ contract DAOCare is SuperAppBase {
         VoteType vote;
     }
 
+    struct Volunteer {
+        string name;
+        address volunteer;
+        bool completed;
+        uint256 proposalId;
+    }
+    struct Planner {
+        address planner;
+        string description;
+        address[] ProposersRequested;
+        address[] ProposersAccepted;
+        uint256 proposalId;
+        bool accepted;
+    }
+
+    mapping(address => Planner) planners;
+    address[] public plannersAddr;
+
     mapping(address => mapping(bool => bool)) votedI;
     mapping(uint256 => Proposal) public proposals;
     address[] public proposerAddress;
+    address[] public activeProposerAddress;
     uint256 totalProposals;
-
+    address[] public volunteers;
+    mapping(address => Volunteer) Volunteers;
+    uint256 thresholdAmountMax;
     event ProposalCreated(uint256 indexed proposalId, address indexed proposer);
 
     function createProposal(string memory _description) external {
@@ -149,7 +200,22 @@ contract DAOCare is SuperAppBase {
         }
     }
 
-    function executeProposal(uint256 proposalId) public {
+    function setVotingThreshold(uint256 _thresholdAmount) public {
+        thresholdAmount = _thresholdAmount;
+    }
+
+    function setVotingThresholdMax(uint256 _thresholdAmountMax) public {
+        thresholdAmountMax = _thresholdAmountMax;
+    }
+
+    function setUnit(uint128 _ProposerUnitShare) public {
+        ProposerUnitShare = _ProposerUnitShare;
+    }
+
+    function executeProposal(uint256 proposalId, bytes memory ctx)
+        internal
+        returns (bytes memory newCtx)
+    {
         Proposal storage newProposals = proposals[proposalId];
 
         require(
@@ -157,7 +223,284 @@ contract DAOCare is SuperAppBase {
             "You cannot vote for completed proposals!"
         );
 
-        require(newProposals.yesVotes > newProposals.noVotes);
+        uint256 votingTotal = newProposals.yesVotes + newProposals.noVotes;
+        uint256 votingPer = (newProposals.yesVotes * 100) / votingTotal;
+        require(votingPer > thresholdAmount);
+        // activeProposerAddress.push(newProposals.proposer);
+        // currentProposar = newProposals.proposer;
         newProposals.active = true;
+        uint128 unit;
+        if (votingPer >= thresholdAmountMax) {
+            unit = ProposerUnitShare;
+        } else {
+            unit = 1;
+        }
+        // int96 netFlowRate = cfaV1Lib.cfa.getNetFlow(
+        //     _acceptedToken,
+        //     address(this)
+        // );
+
+        // (, int96 outFlowRate, , ) = cfaV1Lib.cfa.getFlow(
+        //     _acceptedToken,
+        //     address(this),
+        //     newProposals.proposer
+        // );
+        // int96 inFlowRate = netFlowRate + outFlowRate;
+        // if (outFlowRate > 0) {}
+        // cfaV1Lib.createFlowWithCtx(
+        //     ctx,
+        //     currentProposar,
+        //     _acceptedToken,
+        //     inFlowRate
+        // );
+        return _updateVotes(newProposals.proposer, unit, ctx);
+    }
+
+    function VolunteerRegister(uint256 _proposalId, string memory _name)
+        external
+    {
+        Volunteer storage newVolunteer = Volunteers[msg.sender];
+        newVolunteer.name = _name;
+        newVolunteer.volunteer = msg.sender;
+        newVolunteer.completed = false;
+        newVolunteer.proposalId = _proposalId;
+        volunteers.push(msg.sender);
+    }
+
+    function PlannerRegister(uint256 _proposalId, string memory _description)
+        external
+    {
+        Planner storage newPlanner = planners[msg.sender];
+        newPlanner.planner = msg.sender;
+        newPlanner.description = _description;
+        newPlanner.accepted = false;
+        newPlanner.proposalId = _proposalId;
+        plannersAddr.push(msg.sender);
+    }
+
+    function bookPlanner(uint256 proposalId, address _planner) external {
+        Proposal storage newProposals = proposals[proposalId];
+        Planner storage newPlanner = planners[_planner];
+
+        require(newProposals.proposer == msg.sender);
+        newPlanner.ProposersRequested.push(msg.sender);
+    }
+
+    function acceptedProposal(address _proposer) external {
+        Planner storage newPlanner = planners[msg.sender];
+        newPlanner.ProposersAccepted.push(_proposer);
+    }
+
+    function executePlannerProposal(
+        int96 ProposerflowRate,
+        int96 PlannerflowRate,
+        address planner
+    ) external {
+        (, int96 outFlowRate, , ) = cfaV1Lib.cfa.getFlow(
+            _acceptedToken,
+            address(this),
+            currentProposar
+        );
+
+        if (outFlowRate > 0) {
+            cfaV1Lib.updateFlow(
+                currentProposar,
+                _acceptedToken,
+                ProposerflowRate
+            );
+            cfaV1Lib.createFlow(planner, _acceptedToken, PlannerflowRate);
+        }
+    }
+
+    function _isVolunteerCompleted(uint256 proposalId, address _volunteerAddr)
+        external
+    {
+        Proposal storage newProposals = proposals[proposalId];
+        require(newProposals.proposer == msg.sender);
+        Volunteers[_volunteerAddr].completed = true;
+    }
+
+    function createIndex() external {
+        idaV1.createIndex(_acceptedToken, _INDEX_ID);
+    }
+
+    function distribute() external {
+        (int256 cashAmount, , ) = _acceptedToken.realtimeBalanceOf(
+            address(this),
+            block.timestamp
+        );
+
+        require(cashAmount > 0, "SQF: You need Money to distribute");
+        (uint256 actualCashAmount, ) = idaV1.ida.calculateDistribution(
+            _acceptedToken,
+            address(this),
+            _INDEX_ID,
+            uint256(cashAmount)
+        );
+        idaV1.distribute(_acceptedToken, _INDEX_ID, actualCashAmount);
+    }
+
+    function _updateVotes(
+        address proposer,
+        uint128 units,
+        bytes memory ctx
+    ) internal returns (bytes memory newCtx) {
+        return
+            idaV1.updateSubscriptionUnitsWithCtx(
+                ctx,
+                _acceptedToken,
+                _INDEX_ID,
+                proposer,
+                units
+            );
+    }
+
+    function deleteShares(address subscriber) public {
+        idaV1.deleteSubscription(
+            _acceptedToken,
+            address(this),
+            _INDEX_ID,
+            subscriber
+        );
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // SUPER APP CALLBACKS
+
+    function beforeAgreementUpdated(
+        ISuperToken _superToken,
+        address _agreementClass,
+        bytes32,
+        bytes calldata, //_agreementData,
+        bytes calldata _ctx
+    )
+        external
+        view
+        override
+        onlyExpected(_superToken, _agreementClass)
+        onlyHost
+        returns (bytes memory cbdata)
+    {
+        ISuperfluid.Context memory decompiledContext = _host.decodeCtx(_ctx);
+        uint256 proposalId = abi.decode(decompiledContext.userData, (uint256));
+
+        return abi.encode(proposalId);
+    }
+
+    function afterAgreementCreated(
+        ISuperToken _superToken,
+        address _agreementClass,
+        bytes32, //_agreementId,
+        bytes calldata, /*_agreementData*/
+        bytes calldata _cbdata,
+        bytes calldata _ctx
+    )
+        external
+        override
+        onlyExpected(_superToken, _agreementClass)
+        onlyHost
+        returns (bytes memory newCtx)
+    {
+        uint256 proposalId = abi.decode(_cbdata, (uint256));
+
+        newCtx = _updateOutflow(proposalId, _ctx);
+        newCtx = executeProposal(proposalId, newCtx);
+
+        return newCtx;
+    }
+
+    function afterAgreementUpdated(
+        ISuperToken _superToken,
+        address _agreementClass,
+        bytes32, // _agreementId,
+        bytes calldata, // _agreementData,
+        bytes calldata _cbdata, // _cbdata,
+        bytes calldata _ctx
+    )
+        external
+        override
+        onlyExpected(_superToken, _agreementClass)
+        onlyHost
+        returns (bytes memory newCtx)
+    {
+        uint256 proposalId = abi.decode(_cbdata, (uint256));
+        return _updateOutflow(proposalId, _ctx);
+    }
+
+    function afterAgreementTerminated(
+        ISuperToken _superToken,
+        address _agreementClass,
+        bytes32, // _agreementId,
+        bytes calldata, // _agreementData
+        bytes calldata _cbdata, // _cbdata,
+        bytes calldata _ctx
+    ) external override onlyHost returns (bytes memory newCtx) {
+        // According to the app basic law, we should never revert in a termination callback
+        if (
+            _superToken != _acceptedToken ||
+            _agreementClass != address(cfaV1Lib.cfa)
+        ) {
+            return _ctx;
+        }
+
+        uint256 proposalId = abi.decode(_cbdata, (uint256));
+        return _updateOutflow(proposalId, _ctx);
+    }
+
+    // function increaseFlow(   address to,
+    //         int96 flowRate,bytes calldata ctx) private returns (bytes memory newCtx) {
+    //         newCtx = ctx;
+
+    //         }
+
+    /// @dev Updates the outflow. The flow is either created, updated, or deleted, depending on the
+    /// net flow rate.
+    /// @param ctx The context byte array from the Host's calldata.
+    /// @return newCtx The new context byte array to be returned to the Host.
+    function _updateOutflow(uint256 proposalId, bytes calldata ctx)
+        private
+        returns (bytes memory newCtx)
+    {
+        newCtx = ctx;
+        Proposal storage newProposals = proposals[proposalId];
+
+        int96 netFlowRate = cfaV1Lib.cfa.getNetFlow(
+            _acceptedToken,
+            address(this)
+        );
+
+        (, int96 outFlowRate, , ) = cfaV1Lib.cfa.getFlow(
+            _acceptedToken,
+            address(this),
+            newProposals.proposer
+        );
+
+        int96 inFlowRate = netFlowRate + outFlowRate;
+
+        if (inFlowRate == 0) {
+            // The flow does exist and should be deleted.
+            newCtx = cfaV1Lib.deleteFlowWithCtx(
+                ctx,
+                address(this),
+                newProposals.proposer,
+                _acceptedToken
+            );
+        } else if (outFlowRate != 0) {
+            // The flow does exist and needs to be updated.
+            newCtx = cfaV1Lib.updateFlowWithCtx(
+                ctx,
+                newProposals.proposer,
+                _acceptedToken,
+                inFlowRate
+            );
+        } else {
+            // The flow does not exist but should be created.
+            newCtx = cfaV1Lib.createFlowWithCtx(
+                ctx,
+                currentProposar,
+                _acceptedToken,
+                inFlowRate
+            );
+        }
     }
 }
