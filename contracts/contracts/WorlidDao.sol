@@ -13,7 +13,8 @@ import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/c
 import {IInstantDistributionAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
 
 import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
-
+import {IWorldID} from "./IWorldID.sol";
+import {ByteHasher} from "./ByteHasher.sol";
 import "./IPublicLock.sol";
 
 /// @dev Constant Flow Agreement registration key, used to get the address from the host.
@@ -37,10 +38,18 @@ error InvalidToken();
 error InvalidAgreement();
 
 contract DAOCare is SuperAppBase {
-    // using ByteHasher for bytes;
+    using ByteHasher for bytes;
     /// @dev The WorldID instance that will be used for verifying proofs
 
     error InvalidNullifier();
+    /// @dev The WorldID instance that will be used for managing groups and verifying proofs
+    IWorldID internal immutable worldId;
+
+    /// @dev The World ID group whose participants can claim this airdrop
+    uint256 internal immutable groupId;
+
+    /// @dev The World ID Action ID
+    uint256 internal immutable actionId;
 
     ISuperfluid public _host;
     /// @dev Whether a nullifier hash has been used already. Used to prevent double-signaling
@@ -65,6 +74,9 @@ contract DAOCare is SuperAppBase {
     // uint256 internal immutable groupId = 1;
 
     constructor(
+        IWorldID _worldId,
+        uint256 _groupId,
+        string memory _actionId,
         ISuperfluid host,
         ISuperToken acceptedToken,
         address receiver,
@@ -75,7 +87,9 @@ contract DAOCare is SuperAppBase {
         assert(address(host) != address(0));
         assert(address(acceptedToken) != address(0));
         assert(receiver != address(0));
-
+        worldId = _worldId;
+        groupId = _groupId;
+        actionId = abi.encodePacked(_actionId).hashToField();
         _acceptedToken = acceptedToken;
         lock = _lockAddress;
         _host = host;
@@ -180,7 +194,25 @@ contract DAOCare is SuperAppBase {
         totalProposals++;
     }
 
-    function castVote(uint256 proposalId, VoteType _voteType) external {
+    function castVote(
+        uint256 proposalId,
+        VoteType _voteType,
+        address input,
+        uint256 root,
+        uint256 nullifierHash,
+        uint256[8] calldata proof
+    ) external {
+        if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
+        worldId.verifyProof(
+            root,
+            groupId,
+            abi.encodePacked(input).hashToField(), // The signal of the proof
+            nullifierHash,
+            actionId,
+            proof
+        );
+
+        nullifierHashes[nullifierHash] = true;
         Proposal storage newProposals = proposals[proposalId];
 
         require(
