@@ -1,0 +1,921 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/contracts/ByteHasher.sol": {
+      "lastModificationDate": 1663672939877,
+      "contentHash": "0af7f114be1dae1c0f019305a366e158",
+      "sourceName": "contracts/ByteHasher.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.10"
+      ],
+      "artifacts": [
+        "ByteHasher"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/contracts/WorlidDao.sol": {
+      "lastModificationDate": 1663672976045,
+      "contentHash": "ff97929b3eb756d7552ca8c560d6e6d0",
+      "sourceName": "contracts/WorlidDao.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/apps/IDAv1Library.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol",
+        "./IWorldID.sol",
+        "./ByteHasher.sol",
+        "./IPublicLock.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.14"
+      ],
+      "artifacts": [
+        "DAOCare"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/contracts/IWorldID.sol": {
+      "lastModificationDate": 1663672929572,
+      "contentHash": "20dc6e3d2d3422391000d0ffc1eede2f",
+      "sourceName": "contracts/IWorldID.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.10"
+      ],
+      "artifacts": [
+        "IWorldID"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/contracts/IPublicLock.sol": {
+      "lastModificationDate": 1663239536751,
+      "contentHash": "b5302a8d950a63d59c020b9c743a7797",
+      "sourceName": "contracts/IPublicLock.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.5.17 <0.9.0"
+      ],
+      "artifacts": [
+        "IPublicLock"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol": {
+      "lastModificationDate": 1663239087265,
+      "contentHash": "4ad2109d5a8003eca4b9a792c863bc87",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/superfluid/ISuperfluid.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.0"
+      ],
+      "artifacts": [
+        "SuperAppBase"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol": {
+      "lastModificationDate": 1663239086585,
+      "contentHash": "7f1c3c2756f57803911d753f3f4591c4",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/superfluid/ISuperfluid.sol",
+        "../interfaces/agreements/IConstantFlowAgreementV1.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.0"
+      ],
+      "artifacts": [
+        "CFAv1Library"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/apps/IDAv1Library.sol": {
+      "lastModificationDate": 1663239086879,
+      "contentHash": "ac620fa3113afdb0a84b62b5b28a8e26",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/apps/IDAv1Library.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/superfluid/ISuperfluid.sol",
+        "../interfaces/agreements/IInstantDistributionAgreementV1.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.0"
+      ],
+      "artifacts": [
+        "IDAv1Library"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol": {
+      "lastModificationDate": 1663239087111,
+      "contentHash": "94b9ff37cfc757042f3cc4633c76617a",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ISuperfluidGovernance.sol",
+        "./ISuperfluidToken.sol",
+        "./ISuperToken.sol",
+        "./ISuperTokenFactory.sol",
+        "./ISuperAgreement.sol",
+        "./ISuperApp.sol",
+        "./Definitions.sol",
+        "../tokens/TokenInfo.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC777/IERC777.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "ISuperfluid"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol": {
+      "lastModificationDate": 1663239086878,
+      "contentHash": "77da979fd304d194dd36437d9895b90e",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../superfluid/ISuperAgreement.sol",
+        "../superfluid/ISuperfluidToken.sol",
+        "../superfluid/Definitions.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "IConstantFlowAgreementV1"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol": {
+      "lastModificationDate": 1663239086879,
+      "contentHash": "83bcbfd8ad94a2206a9b78bc6bcab817",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../superfluid/ISuperAgreement.sol",
+        "../superfluid/ISuperfluidToken.sol",
+        "../superfluid/Definitions.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "IInstantDistributionAgreementV1"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1663239076022,
+      "contentHash": "ad7c2d0af148c8f9f097d65deeb4da6b",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@openzeppelin/contracts/token/ERC777/IERC777.sol": {
+      "lastModificationDate": 1663239076027,
+      "contentHash": "840fa65314c73b948a5923169daa8cdc",
+      "sourceName": "@openzeppelin/contracts/token/ERC777/IERC777.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC777"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluidGovernance.sol": {
+      "lastModificationDate": 1663239087112,
+      "contentHash": "2f1aa88a4dd8c24d891b4782a14cb8bb",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluidGovernance.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ISuperAgreement.sol",
+        "./ISuperToken.sol",
+        "./ISuperfluidToken.sol",
+        "./ISuperfluid.sol",
+        "./Definitions.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "ISuperfluidGovernance"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol": {
+      "lastModificationDate": 1663239087112,
+      "contentHash": "8fcbb7049fb152cab5821b2ebf92768a",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ISuperfluid.sol",
+        "./ISuperfluidToken.sol",
+        "../tokens/TokenInfo.sol",
+        "@openzeppelin/contracts/token/ERC777/IERC777.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "./Definitions.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "ISuperToken"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperTokenFactory.sol": {
+      "lastModificationDate": 1663239087113,
+      "contentHash": "ace93ce8ce67f5c128e34b41154c5bcc",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperTokenFactory.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ISuperToken.sol",
+        "../tokens/ERC20WithTokenInfo.sol",
+        "./Definitions.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "ISuperTokenFactory"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperAgreement.sol": {
+      "lastModificationDate": 1663239087110,
+      "contentHash": "49d978f06d4edeb5125a7152d6897e69",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperAgreement.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ISuperfluidToken.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "ISuperAgreement"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluidToken.sol": {
+      "lastModificationDate": 1663239087112,
+      "contentHash": "a666feaf809596ad7c4f796e6b79b036",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluidToken.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ISuperAgreement.sol",
+        "./Definitions.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "ISuperfluidToken"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/tokens/TokenInfo.sol": {
+      "lastModificationDate": 1663239087447,
+      "contentHash": "6326411b7eb3d451fdffd149d821a7cb",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/tokens/TokenInfo.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "TokenInfo"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/Definitions.sol": {
+      "lastModificationDate": 1663239086633,
+      "contentHash": "9cb84eaf21164a0b9dfa308e9855fada",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/Definitions.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "BatchOperation",
+        "ContextDefinitions",
+        "FlowOperatorDefinitions",
+        "SuperAppDefinitions",
+        "SuperfluidErrors",
+        "SuperfluidGovernanceConfigs"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperApp.sol": {
+      "lastModificationDate": 1663239087111,
+      "contentHash": "3b1a28352fc3ab7b2659bc3ab3c7bb92",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperApp.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ISuperToken.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "ISuperApp"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/node_modules/@superfluid-finance/ethereum-contracts/contracts/interfaces/tokens/ERC20WithTokenInfo.sol": {
+      "lastModificationDate": 1663239086634,
+      "contentHash": "77968d7579793b9f87e33dec4d917f44",
+      "sourceName": "@superfluid-finance/ethereum-contracts/contracts/interfaces/tokens/ERC20WithTokenInfo.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "./TokenInfo.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.8.4"
+      ],
+      "artifacts": [
+        "ERC20WithTokenInfo"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/contracts/DaoCare.sol": {
+      "lastModificationDate": 1663767582934,
+      "contentHash": "611c5e2db520906b8f027c9e94a39d3a",
+      "sourceName": "contracts/DaoCare.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/apps/IDAv1Library.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol",
+        "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol",
+        "./IWorldID.sol",
+        "./ByteHasher.sol",
+        "./IPublicLock.sol",
+        "./IPUSHCommInterface.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.14"
+      ],
+      "artifacts": [
+        "DAOCare"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/contracts/IPUSHCommInterface.sol": {
+      "lastModificationDate": 1663767561188,
+      "contentHash": "be29c82e37e9ca603809972bd6d76cff",
+      "sourceName": "contracts/IPUSHCommInterface.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.10"
+      ],
+      "artifacts": [
+        "IPUSHCommInterface"
+      ]
+    },
+    "/Users/ishitarastogi/Documents/DAOCare/contracts/contracts/Greeter.sol": {
+      "lastModificationDate": 1663674745470,
+      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceName": "contracts/Greeter.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": []
+    }
+  }
+}
