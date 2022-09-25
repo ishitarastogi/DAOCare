@@ -24,18 +24,7 @@ function Section() {
           </div>
           <div class="card_title title-white">
             <p>
-              <Link to="/volunteerReg">Volunteer Registration</Link>
-            </p>
-          </div>
-        </div>
-
-        <div class="card 3">
-          <div class="card_image">
-            <img src="https://media.giphy.com/media/DIfoRO9bp2hriB0e6f/giphy.gif" />
-          </div>
-          <div class="card_title title-white">
-            <p>
-              <Link to="/plannerReg">Stratagic Planner Registration</Link>
+              <Link to="/nftMembership">Get NFT Membership</Link>
             </p>
           </div>
         </div>
@@ -47,28 +36,6 @@ function Section() {
           <div class="card_title title-white">
             <p>
               <Link to="/activeProposal">Active Proposals</Link>
-            </p>
-          </div>
-        </div>
-
-        <div class="card 4">
-          <div class="card_image">
-            <img src="https://media.giphy.com/media/xT5LMUk6qCU7hbIf7y/giphy.gif" />
-          </div>
-          <div class="card_title title-white">
-            <p>
-              <Link to="/volunteerList">Volunteer List</Link>
-            </p>
-          </div>
-        </div>
-
-        <div class="card 4">
-          <div class="card_image">
-            <img src="https://media.giphy.com/media/L4fB9di7ekn3F5PXaW/giphy.gif" />
-          </div>
-          <div class="card_title title-black">
-            <p>
-              <Link to="/plannerList">Planner List</Link>
             </p>
           </div>
         </div>

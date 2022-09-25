@@ -1,15 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ethers } from "ethers";
-import { useAccount } from "wagmi";
-import "./CreateProposal.css";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import "./CreateProposal.css";
 import logo from "../assets/logo.png";
 
 function CreateProposal() {
-  const { data: account } = useAccount();
-
   const [proposalName, setProposalName] = useState("");
   const [proposalDescription, setProposalDescription] = useState("");
   const [proposalImage, setProposalImage] = useState("");
@@ -21,7 +17,26 @@ function CreateProposal() {
       description: proposalDescription,
       image: proposalImage,
     };
+    try {
+      const response = await fetch("../pages/api/Proposal-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (response.status !== 200) {
+        alert("Something went wrong.");
+      } else {
+        let responseJSON = await response.json();
+        await createEvent(responseJSON.cid);
+      }
+    } catch (error) {
+      alert(`Oops! Something went wrong. ${error}`);
+    }
   }
+
+  //TODO
+  const createProposal = async (cid) => {};
+
   return (
     <div className="conatiners">
       <div className="header">

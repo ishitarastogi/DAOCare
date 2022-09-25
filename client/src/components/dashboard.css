@@ -1,0 +1,40 @@
+.column {
+  float: left;
+  width: 25%;
+  padding: 10px;
+  /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.column-main {
+  height: 400px;
+  margin-top: 40px;
+  color: rgb(151, 165, 212);
+  border: 5px solid grey;
+  border-bottom: 5px solid grey;
+}
+.heading {
+  text-align: center;
+  padding: 20px;
+  font-size: 48px;
+}
+.list-1 {
+  margin-top: 10px;
+
+  color: white;
+  list-style: none;
+}
+.list {
+  margin-top: 10px;
+  color: white;
+  list-style: none;
+  padding-left: 40px;
+}
+.head2 {
+  padding-right: 20px;
+}

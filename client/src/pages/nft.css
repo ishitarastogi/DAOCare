@@ -1,0 +1,40 @@
+.block {
+  display: block;
+  width: 200px;
+  margin: 0 auto;
+  background-image: linear-gradient(
+    to right,
+    #77a1d3 0%,
+    #79cbca 51%,
+    #77a1d3 100%
+  );
+  padding: 20px 42px;
+
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: -webkit-linear-gradient(#eee, #333);
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  font-size: 22px;
+}
+
+.block:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.conatiners {
+  color: white;
+  text-align: center;
+}
+.headnft {
+  font-size: 72px;
+  background: -webkit-linear-gradient(#eee, #333);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 40px;
+}

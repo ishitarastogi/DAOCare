@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function Stream() {
-  return (
-    <div>Stream</div>
-  )
+  return <div>Stream</div>;
 }
 
-export default Stream
+export default Stream;

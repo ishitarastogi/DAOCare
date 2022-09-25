@@ -19,12 +19,19 @@ import { DAppProvider } from "@usedapp/core";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
+    chain.goerli,
     chain.polygonMumbai,
     chain.polygon,
     chain.optimism,
     chain.arbitrum,
     ...(process.env.REACT_APP_ENABLE_TESTNETS === "true"
-      ? [chain.polygonMumbai, chain.kovan, chain.rinkeby, chain.ropsten]
+      ? [
+          chain.polygonMumbai,
+          chain.goerli,
+          chain.kovan,
+          chain.rinkeby,
+          chain.ropsten,
+        ]
       : []),
   ],
   [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]

@@ -29,6 +29,32 @@
       src="//unpkg.com/@worldcoin/id/dist/world-id.js"
     ></script>
     <title>React App</title>
+    <!-- Unlock snippet -->
+    <script>
+      (function (d, s) {
+        var js = d.createElement(s),
+          sc = d.getElementsByTagName(s)[0];
+        js.src =
+          "https://paywall.unlock-protocol.com/static/unlock.latest.min.js";
+        sc.parentNode.insertBefore(js, sc);
+      })(document, "script");
+    </script>
+
+    <!-- Unlock Configuration -->
+    <script>
+      var unlockProtocolConfig = {
+        network: 5, // Network ID (1 is for mainnet, 4 for rinkeby, 100 for xDai, etc)
+        locks: {
+          "0x2631cffd085a83e06a014dbd41fea0833931caea": {
+            name: "DAO",
+          },
+        },
+        icon: "https://unlock-protocol.com/static/images/svg/unlock-word-mark.svg",
+        callToAction: {
+          default: "Please unlock this demo!",
+        },
+      };
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

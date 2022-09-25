@@ -2,14 +2,13 @@ import "./App.css";
 import { Route, Switch } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Header from "./containers/header/Header";
+import Dashboard from "./components/Dasboard";
 import Section from "./containers/Section";
 import CreateProposal from "./pages/CreateProposal";
-import VolunteerReg from "./pages/VolunteerReg";
-import PlannerReg from "./pages/PlannerReg";
+
 import Stream from "./pages/Stream";
-import DisplayVolunteer from "./pages/DisplayVolunteer";
-import DisplayPlanner from "./pages/DisplayPlanner";
-import DisplayProposals from "./pages/DisplayProposals";
+import NftUnlock from "./pages/NftUnlock";
+import DisplayProposals from "./pages/ActiveProposals";
 function App() {
   return (
     <div className="App">
@@ -19,26 +18,20 @@ function App() {
             <Navbar />
             <Header />
             <Section />
+            <Dashboard />
           </Route>
 
           <Route path="/createProposal">
             <CreateProposal />
           </Route>
-          <Route path="/volunteerReg">
-            <VolunteerReg />
+          <Route path="/nftMembership">
+            <NftUnlock />
           </Route>
-          <Route path="/plannerReg">
-            <PlannerReg />
-          </Route>
+
           <Route path="/stream">
             <Stream />
           </Route>
-          <Route path="/volunteerList">
-            <DisplayVolunteer />
-          </Route>
-          <Route path="/plannerList">
-            <DisplayPlanner />
-          </Route>
+
           <Route path="/activeProposal">
             <DisplayProposals />
           </Route>

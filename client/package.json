@@ -13,10 +13,13 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "@usedapp/core": "^0.12.1",
+    "@worldcoin/id": "^0.8.0",
+    "axios": "^0.27.2",
     "buffer": "^6.0.3",
     "graphql": "^16.3.0",
     "ipfs-http-client": "^57.0.1",
     "jwt-decode": "^3.1.2",
+    "minimist": "^1.2.5",
     "moment": "^2.29.3",
     "omit-deep": "^0.3.0",
     "react": "^17.0.2",
@@ -27,7 +30,8 @@
     "uuid": "^8.3.2",
     "uuidv4": "^6.2.13",
     "wagmi": "^0.4.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "web3.storage": "^3.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
