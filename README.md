@@ -2,7 +2,7 @@
 
 In a disturbing revelation, the women and child development (WCD) ministry has found that nearly 90% of around 1,400 NGOs seeking financial grants under a major training and employment scheme were fake.
 
-**Dao Care** is a platform that allows NGOs to raise create the proposal and raise funds for the social cause. To mimimise the fake propsal as much as possible the grant will be provided to those NGOs who are majorly upvoted by the community.
+**Dao Care** is a platform that allows NGOs to create the proposal and raise funds for the social cause. To mimimise the fake propsal as much as possible the grant will be provided to those NGOs who are majorly upvoted by the community.
 
 <h2> Protcols used to make the platform Robust and to embed all the necceary functionalities</h2>
 

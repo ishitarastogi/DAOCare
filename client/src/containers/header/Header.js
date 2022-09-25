@@ -1,6 +1,8 @@
 import React from "react";
 import people from "../../assets/peoples.png";
 import "./header.css";
+import { Link } from "react-router-dom";
+import Section from "../Section";
 
 const Header = () => (
   <div className="gpt3__header section__padding" id="home">

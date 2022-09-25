@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
 import logo from "../assets/logo.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Link } from "react-router-dom";
 
 import "./navbar.css";
 
@@ -11,7 +12,10 @@ const Navbar = () => {
   return (
     <div className="gpt3__navbar">
       <div className="gpt3__navbar-links">
-        <img src={logo} width="200px" height="150px" />
+        <Link to="/">
+          {" "}
+          <img src={logo} width="200px" height="150px" />
+        </Link>
         <div className="gpt3__navbar-links_container">
           <p>
             <a href="#home">Home</a>

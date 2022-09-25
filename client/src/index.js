@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
-import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 
 import "@rainbow-me/rainbowkit/styles.css";

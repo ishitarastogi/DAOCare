@@ -1,40 +1,26 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.14;
 
-import {
-    ISuperfluid,
-    ISuperToken,
-    ISuperApp,
-    ISuperAgreement,
-    SuperAppDefinitions
-} from '@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol';
-import {
-    SuperAppBase
-} from '@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol';
+import {ISuperfluid, ISuperToken, ISuperApp, ISuperAgreement, SuperAppDefinitions} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
+import {SuperAppBase} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
 
-import {
-    CFAv1Library
-} from '@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol';
-import {
-    IDAv1Library
-} from '@superfluid-finance/ethereum-contracts/contracts/apps/IDAv1Library.sol';
+import {CFAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol";
+import {IDAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/IDAv1Library.sol";
 
-import {
-    IConstantFlowAgreementV1
-} from '@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol';
-import {
-    IInstantDistributionAgreementV1
-} from '@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol';
+import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
+import {IInstantDistributionAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
 
-import { IWorldID } from './IWorldID.sol';
-import { ByteHasher } from './ByteHasher.sol';
-import './IPublicLock.sol';
-import './IPUSHCommInterface.sol';
+import {IWorldID} from "./IWorldID.sol";
+import {ByteHasher} from "./ByteHasher.sol";
+import "./IPublicLock.sol";
+import "./IPUSHCommInterface.sol";
 
 /// @dev Constant Flow  and Instant distribution Agreement registration key, used to get the address from the host.
-bytes32 constant CFA_ID = keccak256('org.superfluid-finance.agreements.ConstantFlowAgreement.v1');
+bytes32 constant CFA_ID = keccak256(
+    "org.superfluid-finance.agreements.ConstantFlowAgreement.v1"
+);
 bytes32 constant IDA_ID = keccak256(
-    'org.superfluid-finance.agreements.InstantDistributionAgreement.v1'
+    "org.superfluid-finance.agreements.InstantDistributionAgreement.v1"
 );
 
 /// @dev Thrown when the receiver is the zero adress.
@@ -53,12 +39,9 @@ error InvalidToken();
 error InvalidAgreement();
 error InvalidNullifier();
 
-
-                                             
-  /*/////////////////////////////////////////////////////////////////////////
+/*/////////////////////////////////////////////////////////////////////////
   ******************************* DAO CARE **********************************
-  /////////////////////////////////////////////////////////////////////////*/                                              
-                                                
+  /////////////////////////////////////////////////////////////////////////*/
 
 /**
  * @title DAOCare
@@ -71,7 +54,8 @@ contract DAOCare is SuperAppBase {
     using ByteHasher for bytes;
 
     /// @notice Staging Polygon contract address
-    address public EPNS_COMM_ADDRESS = 0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa;
+    address public EPNS_COMM_ADDRESS =
+        0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa;
 
     ISuperfluid public _host;
     /// @notice CFA library setup
@@ -103,15 +87,12 @@ contract DAOCare is SuperAppBase {
     /// @dev Whether a nullifier hash has been used already. Used to prevent double-signaling
     mapping(uint256 => bool) internal nullifierHashes;
 
-
-    address EPNS_CHANNEL_ADDRESS=0xCFfCb4c9d94524E4609FFEF60c47DAf8FC38AE1b;
+    address EPNS_CHANNEL_ADDRESS = 0xCFfCb4c9d94524E4609FFEF60c47DAf8FC38AE1b;
 
     uint256 public votePercentage;
     uint128 ProposerUnitShare;
 
-    address public currentProposar;
-
-    address public  owner;
+    address public owner;
 
     constructor(
         IWorldID _worldId,
@@ -129,15 +110,19 @@ contract DAOCare is SuperAppBase {
         _acceptedToken = acceptedToken;
         lock = _lockAddress;
         _host = host;
-        owner=msg.sender;
+        owner = msg.sender;
 
         cfaV1Lib = CFAv1Library.InitData({
             host: host,
-            cfa: IConstantFlowAgreementV1(address(host.getAgreementClass(CFA_ID)))
+            cfa: IConstantFlowAgreementV1(
+                address(host.getAgreementClass(CFA_ID))
+            )
         });
         idaV1 = IDAv1Library.InitData({
             host: host,
-            ida: IInstantDistributionAgreementV1(address(host.getAgreementClass(IDA_ID)))
+            ida: IInstantDistributionAgreementV1(
+                address(host.getAgreementClass(IDA_ID))
+            )
         });
 
         // Registers Super App, indicating it is the final level (it cannot stream to other super
@@ -151,9 +136,12 @@ contract DAOCare is SuperAppBase {
         );
     }
 
-    ///@dev only addresses holding unlock NFT can particpate. 
+    ///@dev only addresses holding unlock NFT can particpate.
     modifier onlyNFTMembership() {
-        require(lock.balanceOf(msg.sender) > 0, 'Address does not hold NFT membership');
+        require(
+            lock.balanceOf(msg.sender) > 0,
+            "Address does not hold NFT membership"
+        );
         _;
     }
 
@@ -168,8 +156,8 @@ contract DAOCare is SuperAppBase {
         _;
     }
 
-    modifier  onlyOwner(){
-        require(owner==msg.sender);
+    modifier onlyOwner() {
+        require(owner == msg.sender);
         _;
     }
 
@@ -190,10 +178,11 @@ contract DAOCare is SuperAppBase {
         // proposal descripition; store on web3storage
         string description;
         //whether proposal has been completed or not
-        bool active;
+        bool completed;
         //whether person has voted already
         bool voted;
         VoteType vote;
+        bool exists;
     }
 
     /// mapping from proposalID to Proposal struct
@@ -202,7 +191,6 @@ contract DAOCare is SuperAppBase {
     mapping(address => mapping(bool => bool)) votedI;
     /// @dev array to store all the proposer addresses
     address[] public proposerAddress;
-    address[] public activeProposerAddress;
     ///@dev total number of proposals
     uint256 totalProposals;
 
@@ -210,8 +198,6 @@ contract DAOCare is SuperAppBase {
 
     /// @dev struct to store volunteer details
     struct Volunteer {
-        //volunteer name
-        string name;
         address volunteer;
         // whether volunteer completed the task
         bool completed;
@@ -220,80 +206,85 @@ contract DAOCare is SuperAppBase {
     /// @dev mapping from volunteer address to Volunteer struct
     mapping(address => Volunteer) Volunteers;
 
-    address[] public volunteers;
-
     /**************************** Stratagic Planner ****************************/
 
     struct Planner {
-        address planner;
-        string description;
-        address[] ProposersRequested;
-        address[] ProposersAccepted;
-        uint256 proposalId;
+        address Planner;
         bool accepted;
+        uint256 proposalId;
     }
-
     mapping(address => Planner) planners;
-    address[] public plannersAddr;
-
-
-
-    uint256 thresholdAmountMax;
 
     /**************************** Contract Events ****************************/
 
     /// @notice Emitted when pool is created
-    event ProposalCreated(uint256 indexed proposalId, address indexed proposer);
-    event voteCast();
-    event proposalExecuted();
-    event volunteerRegistered();
-    event plannerRegistered();
-    event plannerExecuted();
+    event ProposalCreated(
+        uint256 indexed proposalId,
+        address indexed proposer,
+        string cid
+    );
+    event voteCast(uint256 proposalid, address voteAddr);
+    event proposalExecuted(uint256 proposalId, uint256 unitShare);
+    event plannerRegistered(address planner, uint256 proposalId);
+    event volunteerRegistered(address volunteer, uint256 proposalId);
 
+    /**************************** Contract Functions ****************************/
 
     /**
-    * @dev This function create proposal and integrates EPNS boradcast notification.
-    * Channel is deployed on the polygon testnet. 
-    * @param _description stores the proposal description on web3storage
-    */
-    function createProposal(string memory _description) external {
+     * @dev This function create proposal and integrates EPNS boradcast notification.
+     * Channel is deployed on the polygon testnet.
+     * @param _description stores the proposal description on web3storage
+     */
+    function createProposal(string memory _description)
+        external
+        onlyNFTMembership
+    {
         Proposal storage newProposals = proposals[totalProposals];
         newProposals.proposalId = totalProposals;
         newProposals.proposer = msg.sender;
         newProposals.description = _description;
-        newProposals.active = false;
+        newProposals.completed = false;
+        newProposals.exists = true;
         proposerAddress.push(msg.sender);
         totalProposals++;
         /// @dev EPNS integration for broadcast notifications
         IPUSHCommInterface(EPNS_COMM_ADDRESS).sendNotification(
-            EPNS_CHANNEL_ADDRESS, 
-            EPNS_CHANNEL_ADDRESS, 
+            EPNS_CHANNEL_ADDRESS,
+            EPNS_CHANNEL_ADDRESS,
             bytes(
                 string(
                     // We are passing identity here
                     abi.encodePacked(
-                        '0', // this is notification identity
-                        '1', // this is payload type
-                        '+', // segregator
-                        'New Proposal Created', // this is notificaiton title
-                        '+', // segregator
-                        'Check it out' // notification body
+                        "0", // this is notification identity
+                        "1", // this is payload type
+                        "+", // segregator
+                        "New Proposal Created", // this is notificaiton title
+                        "+", // segregator
+                        "Check it out" // notification body
                     )
                 )
             )
         );
+        emit ProposalCreated(newProposals.proposalId, msg.sender, _description);
     }
 
     /**
-    * @dev This function allows nft holder to vote on proposal. Unlock protocols is used for NFT membership
-    * It also integrate worldcoin so that one person can only vote one time
-    * @param proposalId unique proposalid
-    * @param _voteType enum to declare yes or no votes
-    * @param root The root of the Merkle tree
-    * @param nullifierHash The nullifier for this proof, preventing double signaling
-    * @param proof The zero knowledge proof that demonstrates the claimer has a verified World ID
-    */
-    function castVote(uint256 proposalId, VoteType _voteType,address input,uint256 root,uint256 nullifierHash,uint256[8] calldata proof) external {
+     * @dev This function allows nft holder to vote on proposal. Unlock protocols is used for NFT membership
+     * It also integrate worldcoin so that one person can only vote one time
+     * @param proposalId unique proposalid
+     * @param _voteType enum to declare yes or no votes
+     * @param root The root of the Merkle tree
+     * @param nullifierHash The nullifier for this proof, preventing double signaling
+     * @param proof The zero knowledge proof that demonstrates the claimer has a verified World ID
+     */
+    function castVote(
+        uint256 proposalId,
+        VoteType _voteType,
+        address input,
+        uint256 root,
+        uint256 nullifierHash,
+        uint256[8] calldata proof
+    ) external onlyNFTMembership {
         if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
         worldId.verifyProof(
             root,
@@ -307,8 +298,14 @@ contract DAOCare is SuperAppBase {
         nullifierHashes[nullifierHash] = true;
         Proposal storage newProposals = proposals[proposalId];
 
-        require(newProposals.active == false, 'You cannot vote for completed proposals!');
-        require(votedI[msg.sender][newProposals.voted] == false, 'You have already voted');
+        require(
+            newProposals.completed == false,
+            "You cannot vote for completed proposals!"
+        );
+        require(
+            votedI[msg.sender][newProposals.voted] == false,
+            "You have already voted"
+        );
 
         if (_voteType == VoteType.YES) {
             votedI[msg.sender][newProposals.voted] = true;
@@ -317,27 +314,35 @@ contract DAOCare is SuperAppBase {
             votedI[msg.sender][newProposals.voted] = true;
             newProposals.noVotes += 1;
         }
+        emit voteCast(proposalId, msg.sender);
     }
 
-
+    /**
+     * @dev This function execute the proposal and initiate the superfluid stream
+     */
     function executeProposal(uint256 proposalId, bytes memory ctx)
-        internal onlyOwner
-        returns (bytes memory newCtx) 
+        internal
+        onlyOwner
+        returns (bytes memory newCtx)
     {
         Proposal storage newProposals = proposals[proposalId];
 
-        require(newProposals.active == false, 'You cannot vote for completed proposals!');
+        require(proposals[proposalId].exists, "This proposal does not exist.");
+
+        require(
+            newProposals.completed == false,
+            "You cannot vote for completed proposals!"
+        );
 
         uint256 votingTotal = newProposals.yesVotes + newProposals.noVotes;
         uint256 votingPer = (newProposals.yesVotes * 100) / votingTotal;
         require(votingPer > votePercentage);
 
-        newProposals.active = true;
-
+        newProposals.completed = true;
+        emit proposalExecuted(proposalId, ProposerUnitShare);
 
         return _updateVotes(newProposals.proposer, ProposerUnitShare, ctx);
     }
-
 
     /**************************** Instant distrubution Agreement function ****************************/
 
@@ -345,11 +350,13 @@ contract DAOCare is SuperAppBase {
         idaV1.createIndex(_acceptedToken, _INDEX_ID);
     }
 
+    function distribute() external onlyOwner {
+        (int256 cashAmount, , ) = _acceptedToken.realtimeBalanceOf(
+            address(this),
+            block.timestamp
+        );
 
-    function distribute() external {
-        (int256 cashAmount, , ) = _acceptedToken.realtimeBalanceOf(address(this), block.timestamp);
-
-        require(cashAmount > 0, 'SQF: You need Money to distribute');
+        require(cashAmount > 0, "SQF: You need Money to distribute");
         (uint256 actualCashAmount, ) = idaV1.ida.calculateDistribution(
             _acceptedToken,
             address(this),
@@ -365,13 +372,18 @@ contract DAOCare is SuperAppBase {
         bytes memory ctx
     ) internal returns (bytes memory newCtx) {
         return
-            idaV1.updateSubscriptionUnitsWithCtx(ctx, _acceptedToken, _INDEX_ID, proposer, units);
+            idaV1.updateSubscriptionUnitsWithCtx(
+                ctx,
+                _acceptedToken,
+                _INDEX_ID,
+                proposer,
+                units
+            );
     }
 
-
-    function deleteShares(address subscriber) public {
-        idaV1.deleteSubscription(_acceptedToken, address(this), _INDEX_ID, subscriber);
-    }
+    // function deleteShares(address subscriber) public {
+    //     idaV1.deleteSubscription(_acceptedToken, address(this), _INDEX_ID, subscriber);
+    // }
 
     /**************************** Setter Functions ****************************/
 
@@ -379,59 +391,44 @@ contract DAOCare is SuperAppBase {
     function setVotePercentage(uint256 _votePercentage) public {
         votePercentage = _votePercentage;
     }
-    
-    /// @dev If the proposal get the the percentage defined in this function then the 
-    ///proposal get more shares than other proposal
-    function setVotingThresholdMax(uint256 _thresholdAmountMax) public {
-        thresholdAmountMax = _thresholdAmountMax;
-    }
 
-    /// @dev set unit of shares 
+    /// @dev set unit of shares
     function setUnit(uint128 _ProposerUnitShare) public {
         ProposerUnitShare = _ProposerUnitShare;
     }
 
     /**************************** Volunteer Registration ****************************/
 
-
-    function VolunteerRegister(uint256 _proposalId, string memory _name) external {
+    function VolunteerRegister(uint256 _proposalId) external {
         Volunteer storage newVolunteer = Volunteers[msg.sender];
-        newVolunteer.name = _name;
         newVolunteer.volunteer = msg.sender;
         newVolunteer.completed = false;
         newVolunteer.proposalId = _proposalId;
-        volunteers.push(msg.sender);
     }
 
-    function _isVolunteerCompleted(uint256 proposalId, address _volunteerAddr) external {
-        Proposal storage newProposals = proposals[proposalId];
-        require(newProposals.proposer == msg.sender);
+    function _isVolunteerCompleted(uint256 proposalId, address _volunteerAddr)
+        external
+    {
+        uint256 id = Volunteers[_volunteerAddr].proposalId;
+        require(proposals[id].proposer == msg.sender);
         Volunteers[_volunteerAddr].completed = true;
+        emit volunteerRegistered(_volunteerAddr, proposalId);
     }
-
 
     /**************************** Planner Registration ****************************/
 
-    function PlannerRegister(uint256 _proposalId, string memory _description) external {
+    function plannerSubmitProposal(uint256 proposalId) external {
         Planner storage newPlanner = planners[msg.sender];
-        newPlanner.planner = msg.sender;
-        newPlanner.description = _description;
+        newPlanner.Planner = msg.sender;
+        newPlanner.proposalId = proposalId;
         newPlanner.accepted = false;
-        newPlanner.proposalId = _proposalId;
-        plannersAddr.push(msg.sender);
     }
 
-    function bookPlanner(uint256 proposalId, address _planner) external {
-        Proposal storage newProposals = proposals[proposalId];
-        Planner storage newPlanner = planners[_planner];
-
-        require(newProposals.proposer == msg.sender);
-        newPlanner.ProposersRequested.push(msg.sender);
-    }
-
-    function acceptedProposal(address _proposer) external {
-        Planner storage newPlanner = planners[msg.sender];
-        newPlanner.ProposersAccepted.push(_proposer);
+    function _isProposalAccepted(address planner) external {
+        uint256 id = planners[planner].proposalId;
+        require(proposals[id].proposer == msg.sender);
+        planners[planner].accepted = true;
+        emit plannerRegistered(planner, id);
     }
 
     function executePlannerProposal(
@@ -439,19 +436,23 @@ contract DAOCare is SuperAppBase {
         int96 PlannerflowRate,
         address planner
     ) external {
+        uint256 id = planners[planner].proposalId;
+        require(planners[planner].accepted == true, "message");
         (, int96 outFlowRate, , ) = cfaV1Lib.cfa.getFlow(
             _acceptedToken,
             address(this),
-            currentProposar
+            proposals[id].proposer
         );
 
         if (outFlowRate > 0) {
-            cfaV1Lib.updateFlow(currentProposar, _acceptedToken, ProposerflowRate);
+            cfaV1Lib.updateFlow(
+                proposals[id].proposer,
+                _acceptedToken,
+                ProposerflowRate
+            );
             cfaV1Lib.createFlow(planner, _acceptedToken, PlannerflowRate);
         }
     }
-
-
 
     // ---------------------------------------------------------------------------------------------
     // SUPER APP CALLBACKS
@@ -516,6 +517,7 @@ contract DAOCare is SuperAppBase {
         return _updateOutflow(proposalId, _ctx);
     }
 
+    // Todo : delete subscription
     function afterAgreementTerminated(
         ISuperToken _superToken,
         address _agreementClass,
@@ -525,14 +527,16 @@ contract DAOCare is SuperAppBase {
         bytes calldata _ctx
     ) external override onlyHost returns (bytes memory newCtx) {
         // According to the app basic law, we should never revert in a termination callback
-        if (_superToken != _acceptedToken || _agreementClass != address(cfaV1Lib.cfa)) {
+        if (
+            _superToken != _acceptedToken ||
+            _agreementClass != address(cfaV1Lib.cfa)
+        ) {
             return _ctx;
         }
 
         uint256 proposalId = abi.decode(_cbdata, (uint256));
         return _updateOutflow(proposalId, _ctx);
     }
-
 
     function _updateOutflow(uint256 proposalId, bytes calldata ctx)
         private
@@ -541,7 +545,10 @@ contract DAOCare is SuperAppBase {
         newCtx = ctx;
         Proposal storage newProposals = proposals[proposalId];
 
-        int96 netFlowRate = cfaV1Lib.cfa.getNetFlow(_acceptedToken, address(this));
+        int96 netFlowRate = cfaV1Lib.cfa.getNetFlow(
+            _acceptedToken,
+            address(this)
+        );
 
         (, int96 outFlowRate, , ) = cfaV1Lib.cfa.getFlow(
             _acceptedToken,
@@ -569,7 +576,12 @@ contract DAOCare is SuperAppBase {
             );
         } else {
             // The flow does not exist but should be created.
-            newCtx = cfaV1Lib.createFlowWithCtx(ctx, currentProposar, _acceptedToken, inFlowRate);
+            newCtx = cfaV1Lib.createFlowWithCtx(
+                ctx,
+                newProposals.proposer,
+                _acceptedToken,
+                inFlowRate
+            );
         }
     }
 }
